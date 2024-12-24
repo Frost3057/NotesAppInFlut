@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:notesapp/Models/Note.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:notesapp/Models/NoteDATABASE.dart';
 import 'package:notesapp/Pages/homePage.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +9,7 @@ Future<void> main() async {
   await NoteDatabase.initialize();
   runApp(
       ChangeNotifierProvider(create:(context)=> NoteDatabase(),
-      child: const MyApp(),)
+      child: MyApp(),)
       );
 }
 
@@ -22,6 +22,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
+          textTheme: GoogleFonts.playfairDisplayTextTheme(),
+
+
         // This is the theme of your application.
         //
         // TRY THIS: Try running your application with "flutter run". You'll see
@@ -41,6 +44,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: homePage(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
