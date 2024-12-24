@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:notesapp/Models/Note.dart';
 import 'package:notesapp/Models/NoteDATABASE.dart';
 import 'package:notesapp/UI/noteTile.dart';
 import 'package:provider/provider.dart';
@@ -11,8 +12,17 @@ class homePage extends StatefulWidget{
 }
 
 class _createState extends State<homePage>{
+  void readNote(){
+    context.read<NoteDatabase>().fetchAll();
+  }
+  void initState(){
+    super.initState();
+    readNote();
+  }
   @override
   Widget build(BuildContext context) {
+    final notedb = context.watch<NoteDatabase>();
+    List<Note> notes = notedb.notes;
     TextEditingController controller = TextEditingController();
     void showDi(TextEditingController controller,void Function()? onPressed){
         showDialog(context: context,
@@ -44,7 +54,10 @@ class _createState extends State<homePage>{
       return Consumer<NoteDatabase>(builder: (context,value,child){
         return Scaffold(
           floatingActionButton: FloatingActionButton(onPressed: (){
-            showDi(controller,(){});
+            showDi(controller,(){
+              Provider.of<NoteDatabase>(context,listen: false).add(controller.text);
+              Navigator.pop(context);
+            });
           },child: Icon(Icons.add),backgroundColor: Colors.greenAccent[100],),
           appBar: AppBar(
             backgroundColor:Colors.lightGreen[100]
@@ -72,8 +85,15 @@ class _createState extends State<homePage>{
                 // <weight>: Use a value from 400 to 900
               ),
               Expanded(child: ListView.builder(itemBuilder: (context,index){
-                return noteTile(note:value.notes[index],);
-              } ,itemCount:value.notes.length ,))
+                return noteTile(note:notes[index],delete:(){
+                  context.read<NoteDatabase>().delete(notes[index].id);
+                } ,edit:(){
+                  showDi(controller, (){
+                    context.read<NoteDatabase>().update(notes[index].id,controller.text);
+                    Navigator.pop(context);
+                  });
+                } );
+              } ,itemCount:notes.length ,))
 
             ],
           ),

@@ -7,7 +7,7 @@ class NoteDatabase extends ChangeNotifier{
   //initialize
   static Future<void> initialize() async{
     final dir = await getApplicationDocumentsDirectory();
-    final isar = await Isar.open([NoteSchema], directory: dir.path);
+    isar = await Isar.open([NoteSchema], directory: dir.path);
   }
 
   final List<Note> notes = [];
@@ -31,12 +31,12 @@ class NoteDatabase extends ChangeNotifier{
     if(note!=null){
       note.text = text;
       await isar.writeTxn(()=> isar.notes.put(note));
-      fetchAll();
+      await fetchAll();
     }
   }
   //DELETE
   Future<void> delete(int id) async{
     await isar.writeTxn(()=>isar.notes.delete(id));
-    fetchAll();
+    await fetchAll();
   }
 }
