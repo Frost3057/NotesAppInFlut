@@ -15,6 +15,7 @@ class _createState extends State<homePage>{
   void readNote(){
     context.read<NoteDatabase>().fetchAll();
   }
+  @override
   void initState(){
     super.initState();
     readNote();
@@ -41,9 +42,9 @@ class _createState extends State<homePage>{
                       ),
                     ),
                     SizedBox(height: 50,),
-                    MaterialButton(onPressed: onPressed,child: Text("Save"),
+                    MaterialButton(onPressed: onPressed,
 
-                      color: Colors.greenAccent[100],
+                      color: Colors.greenAccent[100],child: Text("Save"),
                     )
                   ],
                 ),
@@ -58,7 +59,7 @@ class _createState extends State<homePage>{
               Provider.of<NoteDatabase>(context,listen: false).add(controller.text);
               Navigator.pop(context);
             });
-          },child: Icon(Icons.add),backgroundColor: Colors.greenAccent[100],),
+          },backgroundColor: Colors.greenAccent[100],child: Icon(Icons.add),),
           appBar: AppBar(
             backgroundColor:Colors.lightGreen[100]
             ,
@@ -84,6 +85,7 @@ class _createState extends State<homePage>{
                 // Playfair Display
                 // <weight>: Use a value from 400 to 900
               ),
+              SizedBox(height: 15,),
               Expanded(child: ListView.builder(itemBuilder: (context,index){
                 return noteTile(note:notes[index],delete:(){
                   context.read<NoteDatabase>().delete(notes[index].id);
