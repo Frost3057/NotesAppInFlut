@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:notesapp/Models/NoteDATABASE.dart';
 import 'package:notesapp/Pages/homePage.dart';
+import 'package:notesapp/Theme/themes.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
@@ -26,7 +27,6 @@ class MyApp extends StatelessWidget {
 
 
 
-
         // This is the theme of your application.
         //
         // TRY THIS: Try running your application with "flutter run". You'll see
@@ -45,7 +45,12 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: homePage(),
+      home: MaterialApp(
+        home: homePage(),
+        theme: lightMode,
+        darkTheme: darkMode,
+        debugShowCheckedModeBanner: false,
+      ),
       debugShowCheckedModeBanner: false,
     );
   }

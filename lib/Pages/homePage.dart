@@ -4,7 +4,7 @@ import 'package:notesapp/Models/Note.dart';
 import 'package:notesapp/Models/NoteDATABASE.dart';
 import 'package:notesapp/UI/noteTile.dart';
 import 'package:provider/provider.dart';
-
+final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 class homePage extends StatefulWidget{
   const homePage({super.key});
   @override
@@ -22,13 +22,14 @@ class _createState extends State<homePage>{
   }
   @override
   Widget build(BuildContext context) {
+
     final notedb = context.watch<NoteDatabase>();
     List<Note> notes = notedb.notes;
     TextEditingController controller = TextEditingController();
     void showDi(TextEditingController controller,void Function()? onPressed){
         showDialog(context: context,
           builder: (context){
-            return AlertDialog(backgroundColor: Colors.lightGreen[100],
+            return AlertDialog(backgroundColor: Theme.of(context).colorScheme.primary,
               content: Container(
                 width: 400,
                 height: 200,
@@ -43,8 +44,8 @@ class _createState extends State<homePage>{
                     ),
                     SizedBox(height: 50,),
                     MaterialButton(onPressed: onPressed,
-
-                      color: Colors.greenAccent[100],child: Text("Save"),
+                      color: Theme.of(context).colorScheme.secondary,
+                      child: Text("Save"),
                     )
                   ],
                 ),
@@ -54,17 +55,18 @@ class _createState extends State<homePage>{
     }
       return Consumer<NoteDatabase>(builder: (context,value,child){
         return Scaffold(
+          key: _scaffoldKey,
           floatingActionButton: FloatingActionButton(onPressed: (){
             showDi(controller,(){
               Provider.of<NoteDatabase>(context,listen: false).add(controller.text);
-              Navigator.pop(context);
+              Navigator.of(context,rootNavigator: true).pop();
             });
-          },backgroundColor: Colors.greenAccent[100],child: Icon(Icons.add),),
+          },child: Icon(Icons.add),),
           appBar: AppBar(
-            backgroundColor:Colors.lightGreen[100]
+            backgroundColor:Theme.of(context).colorScheme.surface
             ,
           ),
-          backgroundColor: Colors.lightGreen[100],
+          backgroundColor: Theme.of(context).colorScheme.surface,
           body: Column(
             children: [
               Text("Notes",style:GoogleFonts.playfairDisplay(
@@ -89,6 +91,7 @@ class _createState extends State<homePage>{
               Expanded(child: ListView.builder(itemBuilder: (context,index){
                 return noteTile(note:notes[index],delete:(){
                   context.read<NoteDatabase>().delete(notes[index].id);
+                  Navigator.of(context,rootNavigator: true).pop();
                 } ,edit:(){
                   showDi(controller, (){
                     context.read<NoteDatabase>().update(notes[index].id,controller.text);

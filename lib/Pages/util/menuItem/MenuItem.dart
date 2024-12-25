@@ -10,7 +10,7 @@ class MenuItem extends StatelessWidget{
     return Column(
       children: [
           Container(
-            decoration: BoxDecoration(color: Colors.green[400]),
+            decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface),
             child: IconButton(onPressed: edit, icon: Icon(Icons.edit)),
           ),
           Container(
